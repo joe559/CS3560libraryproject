@@ -1,0 +1,76 @@
+-- Create the students table
+CREATE TABLE students (
+  id SERIAL PRIMARY KEY,
+  bronco_id INTEGER NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  course VARCHAR(255)
+);
+
+-- Create the authors table
+CREATE TABLE authors (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  nationality VARCHAR(255),
+  subject VARCHAR(255)
+);
+
+-- Create the directors table
+CREATE TABLE directors (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  nationality VARCHAR(255),
+  style VARCHAR(255)
+);
+
+-- Create the books table
+CREATE TABLE books (
+  code SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  location VARCHAR(255),
+  daily_price NUMERIC(10, 2),
+  status VARCHAR(255) CHECK (status IN ('borrowed', 'available')),
+  pages INTEGER,
+  publisher VARCHAR(255),
+  publication_date DATE
+);
+
+-- Create the documentaries table
+CREATE TABLE documentaries (
+  code SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  location VARCHAR(255),
+  daily_price NUMERIC(10, 2),
+  status VARCHAR(255) CHECK (status IN ('borrowed', 'available')),
+  director_id INTEGER,
+  length INTEGER,
+  release_date DATE,
+  FOREIGN KEY (director_id) REFERENCES directors (id)
+);
+
+-- Create the loans table
+CREATE TABLE loans (
+  id SERIAL PRIMARY KEY,
+  loan_number INTEGER UNIQUE,
+  student_id INTEGER,
+  loan_date DATE,
+  due_date DATE,
+  book_code INTEGER,
+  documentary_code INTEGER,
+  item_type VARCHAR(255) CHECK (item_type IN ('book', 'documentary')),
+  daily_price NUMERIC(10, 2),
+  total_price NUMERIC(10, 2),
+  FOREIGN KEY (student_id) REFERENCES students (id),
+  FOREIGN KEY (book_code) REFERENCES books (code),
+  FOREIGN KEY (documentary_code) REFERENCES documentaries (code)
+);
+
+-- Create the book_authors table
+CREATE TABLE book_authors (
+  book_id INTEGER,
+  author_id INTEGER,
+  PRIMARY KEY (book_id, author_id),
+  FOREIGN KEY (book_id) REFERENCES books (code),
+  FOREIGN KEY (author_id) REFERENCES authors (id)
+);
