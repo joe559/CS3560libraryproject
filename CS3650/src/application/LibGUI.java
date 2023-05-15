@@ -49,8 +49,6 @@ public class LibGUI extends Application {
 		sessionFactory = configuration.buildSessionFactory();
 		session = sessionFactory.openSession();
 
-		System.out.println(session.get(Book.class, 1).getStatus());
-
 		// Horizontal box for the search label and text field
 		searchBar = new TextField();
 		Label searchLabel = new Label("Search:");
